@@ -1,7 +1,7 @@
 import express from 'express';
-import task from './todo/todo.controller';
+import user from './user/user.controller';
 
 const router = express.Router();
-router.use('/task', task);
+router.use('/user', user);
 
 export default router;

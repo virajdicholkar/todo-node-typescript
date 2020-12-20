@@ -4,16 +4,12 @@ import bcrypt from 'bcrypt';
 import {TodoSchema} from './todo.model'
 const router = express.Router();
 router.get('/todo/list', (req, res)=>{
-    const token = req.headers['authorization'].split(' ')[1]
-     jwt.verify(token, 'Top secret', (err, decoded)=>{
-        if(err) return res.status(400).send('Invalid user, please login with valid credentials.');
-        const userId =decoded.id; 
-        TodoSchema.find({user: userId},(err, todo)=>{
+    const {currentUser} = req.body;
+        TodoSchema.find({user: currentUser._id},(err, todo)=>{
             if(err) return res.status(500).send('Currently not able process the request, please try again later.');
             if(!todo) return res.status(404).send('No task found')
             return res.status(200).send(todo)
         })
-    });
 })
 router.get('/:id', (req, res)=>{
     const {id} = req.query;
@@ -31,11 +27,8 @@ router.get('/:id', (req, res)=>{
 
 
 router.post('/',  (req, res)=>{
-    const {name, description, status} = req.body;
-    const token = req.headers['authorization'].split(' ')[1]
-     jwt.verify(token, 'Top secret', (err, decoded)=>{
-        if(err) return res.status(400).send('Please login with valid credentials.');
-        const user =decoded.id; 
+    const {name, description, status, currentUser} = req.body;
+    const user = currentUser._id
          TodoSchema.findOne({name}, (err, todo)=>{
              
              if(err) return res.status(500).send('Currently not able process the request, please try again later.');
@@ -47,7 +40,6 @@ router.post('/',  (req, res)=>{
          })
      })
 
-     })
 })
 
 export default router;
