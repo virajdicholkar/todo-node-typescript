@@ -42,7 +42,7 @@ router.delete('/:id', (req, res)=>{
 router.post('/',  (req, res)=>{
     const {name, description, status, currentUser} = req.body;
     const user = currentUser._id
-         TodoSchema.findOne({name}, (err, todo)=>{
+         TodoSchema.findOne({name, user:user}, (err, todo)=>{
              
              if(err) return res.status(500).send('Currently not able process the request, please try again later.');
              if(todo) return res.status(422).send('Todo task already exist!');
