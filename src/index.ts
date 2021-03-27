@@ -5,8 +5,9 @@ import routes from './routes';
 import unsecuredRoutes from './unsecuredRoutes';
 import cors from 'cors';
 import auth from './authenticate'
+import config from './config';
 const app = express();
-const mongoURI = 'mongodb://localhost:27017/todo-app';
+const mongoURI = config.mongoDbUrl;
 
 app.use('/', (req, res, next)=>{
     console.log('Welcome to the todo application.');
@@ -46,7 +47,7 @@ mongoose.connect(mongoURI, {
 .catch((error)=>{
     console.log(error.message);
 })
-const port = process.env.PORT || 8080;
+const port = config.port;
 app.listen(port, ()=>{
     console.log(`server is listening on ${port}`)
 });
